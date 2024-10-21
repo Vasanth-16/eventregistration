@@ -1,0 +1,25 @@
+git push -u origin main
+
+  <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Set Reminder</label>
+        <select
+          value={reminder}
+          onChange={(e) => setReminder(e.target.value)}
+          className="w-full p-2 border rounded-md focus:outline-none focus:ring"
+        >
+          <option value="1 hour">1 hour before event</option>
+          <option value="30 minutes">30 minutes before event</option>
+        </select>
+      </div>
+
+  <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Set Reminder</label>
+        <select
+          value={reminder}
+          onChange={(e) => setReminder(e.target.value)}
+          className="w-full p-2 border rounded-md focus:outline-none focus:ring"
+        >
+          <option value="1 hour">1 hour before event</option>
+          <option value="30 minutes">30 minutes before event</option>
+        </select>
+      </div>
