@@ -94,7 +94,8 @@ export default function CreateEvent() {
 
   
   return (
-    <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+    <div className="flex items-center justify-center min-h-screen bg-gray-30">
+  <div className="isolate bg-white px-6 py-24  min-w-[40%] sm:py-32 lg:px-8 border-gray-300 shadow-lg">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -107,7 +108,7 @@ export default function CreateEvent() {
           className="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
         />
       </div>
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-2xl  text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Create Event</h2>
       </div>
       <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
@@ -127,8 +128,8 @@ export default function CreateEvent() {
                 className="block w-full bg-gray-200 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-          </div>           
-          <div className="sm:col-span-2">
+          </div>    
+          <div className="sm:col-span-1">
             <label htmlFor="date" className="block text-sm text-start font-semibold leading-6 text-gray-900">
               From Date
             </label>
@@ -144,7 +145,7 @@ export default function CreateEvent() {
               />
             </div>
             </div>
-            <div>
+            <div className="sm:col-span-1">
             <label htmlFor="todate" className="block text-sm text-start font-semibold leading-6 text-gray-900">
               To Date
             </label>
@@ -152,15 +153,15 @@ export default function CreateEvent() {
               <input
                 id="todate"
                 name="todate"
-                type="Date"
+                type="date"
                 value={todate}
                 onChange={(e) => setToDate(e.target.value)}
                 autoComplete="date"
-                className="block w-full rounded-md border-0 bg-gray-200 color-gray-900 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+                className="block w-full rounded-md border-0 px-3.5 text-gray-900 bg-gray-300 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                 />
             </div>
           </div>
-        
+            
           <div className="sm:col-span-3">
             <label htmlFor="company" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Location
@@ -268,6 +269,7 @@ export default function CreateEvent() {
         </div>
        
       </form>
+    </div>
     </div>
   )
 }

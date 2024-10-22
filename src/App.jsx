@@ -1,17 +1,28 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+
+import React, { useState } from 'react';
 import axios from 'axios';
+import Login from './pages/login';
 import CreateEvent from './pages/CreateEvent';
-import tailwindConfig from '../tailwind.config';
-function App() {
-  const [count, setCount] = useState(0)
+import './App.css'
+
+const App = () => {
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
+
+  const handleLogin = (id, token) => {
+    setUserId(id);
+    setToken(token);
+  };
 
   return (
- 
-    <CreateEvent />
-  )
-}
+    <div >
+      {!userId ? (
+        <Login onLogin={handleLogin} />
+      ) : (
+        <EventDashboard userId={userId} />
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
