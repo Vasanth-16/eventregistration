@@ -17,6 +17,7 @@
 import { useState, useRef} from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Field, Label, Switch } from '@headlessui/react'
+import axios from 'axios';
 
 export default function CreateEvent() {
   const [agreed, setAgreed] = useState(false)
@@ -31,8 +32,15 @@ export default function CreateEvent() {
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`; // Adjust format for backend if needed
+  };
   const handleFileUpload = (e) => {
-    const selectedFiles = Array.from(event.target.files); // Get the selected files
+    const selectedFiles = Array.from(e.target.files); // Get the selected files
     setFiles(selectedFiles);
   };
 
@@ -40,9 +48,51 @@ export default function CreateEvent() {
     fileInputRef.current.click(); // Trigger the hidden file input click
   };
 
-  const handleSubmit = () => {
-    // Submit event data logic
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await axios.post("http://192.168.90.209:3000/api/events", {
+        EVENT_NAME: eventName,
+        EVENT_FROM_DATE: formatDate(fromdate), // Format dates correctly
+        EVENT_TO_DATE: formatDate(todate),
+        EVENT_LOCATION: location,
+        EVENT_ORGANIZATION: organization,
+        EVENT_DEPARTMENT: department,
+        ENTRY_BY: 0,
+        EVENT_DETAILS: description,
+        EVENT_REMARKS: description,
+        EVENT_FEES: 0,
+      });
+      const file = await axios.post("http://192.168.90.209:3000/api/events", {
+        EVENT_IMAGE: files, // Format dates correctly
+      });
+
+      console.log("Response:", response.data);
+
+      // Reset form fields for the next entry
+      setEventName("");
+      setOrganization("");
+      setDepartment("");
+      setFromDate("");
+      setToDate("");
+      // setEventDetails("");
+      setLocation("");
+      setDescription("");
+      // setFiles([]);
+      setIsModalVisible(true);
+
+    } catch (err) {
+      console.error("Error submitting form:", err);
+    }
   };
+
+  const handleClearTable = () => {
+    setIsModalVisible(false);
+  };
+
+  
   return (
     <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div
@@ -60,7 +110,7 @@ export default function CreateEvent() {
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Create Event</h2>
       </div>
-      <form action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
+      <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div className="sm:col-span-3">
             <label htmlFor="company" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
@@ -86,10 +136,9 @@ export default function CreateEvent() {
               <input
                 id="date"
                 name="date"
-                type="Date"
+                type="date"
                 value={fromdate}
-                onChange={(e) => setFormDate(e.target.value)}
-                placeholder='DD-MM-YYYY'
+                onChange={(e) => setFromDate(e.target.value)}
                 autoComplete="date"
                 className="block w-full rounded-md border-0 px-3.5 text-gray-900 bg-gray-300 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
