@@ -14,7 +14,7 @@
 */
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef} from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Field, Label, Switch } from '@headlessui/react'
 
@@ -29,10 +29,15 @@ export default function CreateEvent() {
   const [department, setDepartment] = useState([]);
   const [description, setDescription] = useState([]);
   const [files, setFiles] = useState([]);
+  const fileInputRef = useRef(null);
 
   const handleFileUpload = (e) => {
-    const uploadedFiles = Array.from(e.target.files);
-    setFiles(uploadedFiles);
+    const selectedFiles = Array.from(event.target.files); // Get the selected files
+    setFiles(selectedFiles);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click(); // Trigger the hidden file input click
   };
 
   const handleSubmit = () => {
@@ -56,25 +61,24 @@ export default function CreateEvent() {
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Create Event</h2>
       </div>
       <form action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-1">
-          <div>
-            <label htmlFor="event-name" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
-              Event name
+        <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div className="sm:col-span-3">
+            <label htmlFor="company" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
+              Event Name
             </label>
             <div className="mt-2.5">
-            <input
-            type="text"
-            id="event-name"
-            placeholder='Event Name'
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-                autoComplete="given-name"
-                className="block w-full bg-gray-300  rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white-500 focus:ring-1 focus:ring-inset focus:ring-#ff80b5 sm:text-sm sm:leading-6"
+               <input
+               type="text"
+               id="event-name"
+               placeholder='Event Name'
+               value={eventName}
+               onChange={(e) => setEventName(e.target.value)}
+                autoComplete="event-name"
+                className="block w-full bg-gray-200 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-          </div>    
-          <br/>            
-          <div className="sm:col-span-1">
+          </div>           
+          <div className="sm:col-span-2">
             <label htmlFor="date" className="block text-sm text-start font-semibold leading-6 text-gray-900">
               From Date
             </label>
@@ -83,6 +87,9 @@ export default function CreateEvent() {
                 id="date"
                 name="date"
                 type="Date"
+                value={fromdate}
+                onChange={(e) => setFormDate(e.target.value)}
+                placeholder='DD-MM-YYYY'
                 autoComplete="date"
                 className="block w-full rounded-md border-0 px-3.5 text-gray-900 bg-gray-300 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -97,13 +104,15 @@ export default function CreateEvent() {
                 id="todate"
                 name="todate"
                 type="Date"
+                value={todate}
+                onChange={(e) => setToDate(e.target.value)}
                 autoComplete="date"
-                className="block w-full rounded-md border-0 bg-gray-300 color-gray-900 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 bg-gray-200 color-gray-900 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-              </div>
             </div>
+          </div>
         
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-3">
             <label htmlFor="company" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Location
             </label>
@@ -116,11 +125,11 @@ export default function CreateEvent() {
                 placeholder='Location'
                 type="text"
                 autoComplete="location"
-                className="block w-full bg-gray-300 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full bg-gray-200 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-3">
             <label htmlFor="organization" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Organization
             </label>
@@ -130,12 +139,14 @@ export default function CreateEvent() {
                 name="organization"
                 placeholder="Organization"
                 type="text"
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
                 autoComplete="organization"
-                className="block w-full rounded-md bg-gray-300 border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md bg-gray-200 border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-3">
             <label htmlFor="department" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Department
             </label>
@@ -144,13 +155,15 @@ export default function CreateEvent() {
                 id="department"
                 name="department"
                 type="text"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
                 placeholder="Department"
-                autoComplete="tel"
-                className="block w-full text-start rounded-md bg-gray-300 border-0 px-3.5 py-2 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  text-start focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                autoComplete="Department"
+                className="block w-full rounded-md bg-gray-200 border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-3">
             <label htmlFor="message" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Description
             </label>
@@ -158,6 +171,8 @@ export default function CreateEvent() {
               <textarea
                 id="description"
                 name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 className="block w-full rounded-md bg-gray-300 border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 defaultValue={''}
@@ -166,24 +181,33 @@ export default function CreateEvent() {
           </div>
         </div>
         <div className="mt-10">
-          <button
-             type="file"
-             multiple
-             onChange={handleFileUpload}
-   
-            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-          Upload File
-          </button>
-          <ul className="mt-2">
-          {files.map((file, index) => (
-            <li key={index} className="text-sm">
-              {file.name} ({(file.size / 1024).toFixed(2)} KB)
-            </li>
-          ))}
-        </ul>
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        onChange={handleFileUpload}
+        style={{ display: 'none' }} // Hide the file input
+      />
 
-        </div>
+      {/* Custom upload button */}
+      <button
+        type="button"
+        onClick={handleButtonClick}
+        className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Upload File
+      </button>
+
+      {/* Display the list of selected files */}
+      <ul className="mt-2">
+        {files.map((file, index) => (
+          <li key={index} className="text-sm text-gray-500">
+            {file.name} ({(file.size / 1024).toFixed(2)} KB)
+          </li>
+        ))}
+      </ul>
+    </div>
         
         <div className="mt-10">
           <button
