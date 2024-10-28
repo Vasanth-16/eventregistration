@@ -8,17 +8,22 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post('http://localhost:5000/login', { userId, password })
-      .then(response => {
-        alert('Login Successful');
-        onLogin(response.data.userId, response.data.token);
+      e.preventDefault();
+
+      axios.post('http://192.168.90.209:3000/api/login', {
+          userId: userId,
+          password: password,
       })
-      .catch(error => {
-        console.error('Login Error:', error);
-        alert('Login Failed');
-      });
+          .then(response => {
+              alert('Login Successful');
+              onLogin(response.data.userId, response.data.token); // Use returned data
+          })
+          .catch(error => {
+              console.error('Login Error:', error);
+              alert('Login Failed: ' + error.response.data.message); // Show specific error message
+          });
   };
+
 
   return (
     <section class="bg-gray-50 light:bg-gray-900 min-w-full">

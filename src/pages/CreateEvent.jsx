@@ -24,13 +24,14 @@ export default function CreateEvent() {
   const [eventName, setEventName] = useState('');
   const [fromdate, setFromDate] = useState('');
   const [todate, setToDate] = useState('');
-  const [time, setTime] = useState('');
+  const [userId, setUserId] = useState('');
   const [organization, setOrganization] = useState('');
   const [location, setLocation] = useState('');
   const [department, setDepartment] = useState([]);
   const [description, setDescription] = useState([]);
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
+  const [qrCode, setQrCode] = useState('');
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -63,26 +64,30 @@ export default function CreateEvent() {
         ENTRY_BY: 0,
         EVENT_DETAILS: description,
         EVENT_REMARKS: description,
-        EVENT_FEES: 0,
+        USER_ID: userId,
+        EVENT_FEES:0,
       });
-      const file = await axios.post("http://192.168.90.209:3000/api/events", {
-        EVENT_IMAGE: files, // Format dates correctly
-      });
+      // const file = await axios.post("http://192.168.90.209:3000/api/events", {
+      //   EVENT_IMAGE: files, // Format dates correctly
+      // });
 
       console.log("Response:", response.data);
-
+      setQrCode(response.data.qrCode); 
       // Reset form fields for the next entry
       setEventName("");
       setOrganization("");
       setDepartment("");
       setFromDate("");
       setToDate("");
+      setUserId("");
       // setEventDetails("");
       setLocation("");
       setDescription("");
       // setFiles([]);
       setIsModalVisible(true);
-
+    
+        alert('Event created successfully');
+        
     } catch (err) {
       console.error("Error submitting form:", err);
     }
@@ -114,7 +119,7 @@ export default function CreateEvent() {
       <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div className="sm:col-span-3">
-            <label htmlFor="company" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
+            <label htmlFor="event-name" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
               Event Name
             </label>
             <div className="mt-2.5">
@@ -125,6 +130,22 @@ export default function CreateEvent() {
                value={eventName}
                onChange={(e) => setEventName(e.target.value)}
                 autoComplete="event-name"
+                className="block w-full bg-gray-200 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>    
+          <div className="sm:col-span-3">
+            <label htmlFor="userId" className="block text-sm font-semibold leading-6 text-gray-900 text-start">
+              User Id
+            </label>
+            <div className="mt-2.5">
+               <input
+               type="text"
+               id="userId"
+               placeholder='User Id'
+               value={userId}
+               onChange={(e) => setUserId(e.target.value)}
+                autoComplete="userId"
                 className="block w-full bg-gray-200 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -266,6 +287,12 @@ export default function CreateEvent() {
           >
           Submit
           </button>
+          {qrCode && (
+  <div className="mt-4">
+    <h3 className="text-xl">QR Code:</h3>
+    <img src={qrCode} alt="QR Code" />
+  </div>
+)}
         </div>
        
       </form>
